@@ -25,6 +25,13 @@ const store = new Vuex.Store({
     changeCount (state, newCount) {
       state.count = newCount
     }
+  },
+  actions: {
+    setAsyncCount (context, newTitle) {
+      setTimeout(() => {
+        context.commit('changeTitle', newTitle)
+      }, 1000)
+    }
   }
 })
 export default store
