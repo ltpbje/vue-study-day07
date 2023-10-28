@@ -5,10 +5,13 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 const store = new Vuex.Store({
   strict: true,
+  // 1.通过state可以提供数据（所有组件共享的数据）
   state: {
     title: '仓库大标题',
-    count: 12
+    count: 12,
+    list: [0, 12, 323, 2, 3, 4, 5, 23, 16, 12]
   },
+  // 2. 通过mutation 修改 state（也就是数据）
   mutations: {
     handleAdd (state, n) {
       state.count += n
@@ -26,11 +29,18 @@ const store = new Vuex.Store({
       state.count = newCount
     }
   },
+  // 3.actions处理异步
   actions: {
     setAsyncCount (context, newTitle) {
       setTimeout(() => {
         context.commit('changeTitle', newTitle)
-      }, 1000)
+      }, 2000)
+    }
+  },
+  // 4.getters类似于计算属性
+  getters: {
+    filterList (state) {
+      return state.list.filter((item) => item > 5)
     }
   }
 })

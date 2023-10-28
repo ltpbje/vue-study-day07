@@ -7,6 +7,9 @@
         <button @click="handleAdd(5)">值 + 5</button>
         <button @click="handleAdd(10)">值 + 10</button>
         <button @click="changeTitle">修改标题</button>
+        <div>{{ $store.state.list }}</div>
+        <!-- 1.原生js访问getters中的数据 -->
+        <div>{{ $store.getters.filterList }}</div>
     </div>
 </template>
 
