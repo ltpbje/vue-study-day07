@@ -10,7 +10,13 @@ const mutations = {
     state.userInfo.age = newInfo.age
   }
 }
-const actions = {}
+const actions = {
+  UpdateUserSecond (context, newUserInfo) {
+    setTimeout(() => {
+      context.commit('changeUserInfo', newUserInfo)
+    }, 1000)
+  }
+}
 const getters = {
   toUpcase (state) {
     return state.userInfo.name.toUpperCase()

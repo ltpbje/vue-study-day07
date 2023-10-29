@@ -20,6 +20,9 @@
         <button @click="UpdateTheme">修改主题</button>
         <div>{{ $store.state.user.userInfo.name }}</div>
         <button @click="UpdateUserInfo">更新个人信息</button>
+        <!-- 原生 利用action 异步 修改 模块中的 state（数据） -->
+        <div>{{ $store.state.user.userInfo }}</div>
+        <button @click="UpdateUserSecond({name:'xiaoming',age:30})">1s后更新个人信息</button>
     </div>
 </template>
 
@@ -31,6 +34,9 @@ export default {
     ...mapState(['title', 'count'])
   },
   methods: {
+    UpdateUserSecond (newUseInfo) {
+      this.$store.dispatch('user/UpdateUserSecond', newUseInfo)
+    },
     UpdateUserInfo () {
       this.$store.commit('user/changeUserInfo', { name: 'pink', age: 18 })
     },

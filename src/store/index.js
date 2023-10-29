@@ -31,7 +31,7 @@ const store = new Vuex.Store({
       state.count = newCount
     }
   },
-  // 3.actions处理异步
+  // 3.actions处理异步任务
   actions: {
     setAsyncCount (context, newTitle) {
       setTimeout(() => {
