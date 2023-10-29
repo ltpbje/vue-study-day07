@@ -4,7 +4,12 @@ const state = {
     age: 18
   }
 }
-const mutations = {}
+const mutations = {
+  changeUserInfo (state, newInfo) {
+    state.userInfo.name = newInfo.name
+    state.userInfo.age = newInfo.age
+  }
+}
 const actions = {}
 const getters = {
   toUpcase (state) {

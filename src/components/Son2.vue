@@ -16,7 +16,9 @@
         <div>{{ theme }}</div>
         <hr>
         <!-- 辅助函数映射modules中的getters -->
-        <div>{{ user.mapGetters.toUpcase }}</div>
+        <!-- <div>{{ this['user/toUpcase'] }}</div> -->
+        <div>{{ toUpcase }}</div>
+        <!-- <button @click="fn"></button> -->
     </div>
 </template>
 
@@ -29,7 +31,8 @@ export default {
     // ...mapState(['user'])
     ...mapState('user', ['userInfo']),
     ...mapState('setting', ['theme']),
-    ...mapGetters(['user/toUpcase'])
+    // ...mapGetters(['user/toUpcase'])// 不推荐，给实例写入`user/toUpcase`属性
+    ...mapGetters('user', ['toUpcase'])// 推荐，给实例写入`toUpcase`属性
   },
   methods: {
     // 辅助函数- mapMutations 映射方法

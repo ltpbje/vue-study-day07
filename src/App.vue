@@ -15,7 +15,7 @@ import Son2 from './components/Son2.vue'
 export default {
   name: 'app',
   created () {
-    console.log(this.$store)
+    // console.log(this.$store)
   },
   data: function () {
     return {
