@@ -1,6 +1,8 @@
 // 这里面存放的就是vuex相关的核心代码
 import Vue from 'vue'
 import Vuex from 'vuex'
+import user from './modules/user'
+import setting from './modules/setting'
 // 插件安装
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -42,6 +44,11 @@ const store = new Vuex.Store({
     filterList (state) {
       return state.list.filter((item) => item > 5)
     }
+  },
+  // modules 模块
+  modules: {
+    user,
+    setting
   }
 })
 export default store

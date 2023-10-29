@@ -8,15 +8,28 @@
         <button @click="handleSub(10)">值 - 10</button>
         <button @click="setAsyncCount('辅助函数映射')">1S后修改标题为辅助函数映射</button>
         <div>{{ filterList }}</div>
+        <!-- 辅助函数映射modules中的数据 -->
+        <!--    默认根级别的映射mapState(['xXx'])   -->
+        <!-- <div>{{ user.userInfo.name }}</div> -->
+        <!-- 子模块的映射mapState('模块名'，['xx']·需要开启命名空间 -->
+        <div>{{ userInfo.name }}</div>
+        <div>{{ theme }}</div>
+        <hr>
+        <!-- 辅助函数映射modules中的getters -->
+        <div>{{ user.mapGetters.toUpcase }}</div>
     </div>
 </template>
 
 <script>
-import { mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 export default {
   name: 'Son2Com',
   computed: {
-    ...mapGetters(['filterList'])
+    ...mapGetters(['filterList']),
+    // ...mapState(['user'])
+    ...mapState('user', ['userInfo']),
+    ...mapState('setting', ['theme']),
+    ...mapGetters(['user/toUpcase'])
   },
   methods: {
     // 辅助函数- mapMutations 映射方法

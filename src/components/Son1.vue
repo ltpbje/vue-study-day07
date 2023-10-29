@@ -8,8 +8,13 @@
         <button @click="handleAdd(10)">值 + 10</button>
         <button @click="changeTitle">修改标题</button>
         <div>{{ $store.state.list }}</div>
-        <!-- 1.原生js访问getters中的数据 -->
+        <!-- 1.原生 访问getters中的数据 -->
         <div>{{ $store.getters.filterList }}</div>
+        <hr>
+        <!-- 原生 访问模块中的state -->
+        <div>{{ $store.state.user.userInfo.name }}</div>
+        <!-- 原生 访问模块中的getters -->
+        <div>{{ $store.getters['user/toUpcase']}}</div>
     </div>
 </template>
 
