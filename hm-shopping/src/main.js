@@ -12,6 +12,7 @@ import store from './store'
 // Vue.use(Button)
 // Vue.use(Switch)
 import '@/utils/vant-ui'
+import '@/styles/common.less'
 
 Vue.config.productionTip = false
 new Vue({
