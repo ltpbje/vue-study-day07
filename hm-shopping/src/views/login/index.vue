@@ -18,8 +18,8 @@
           <div class="item ">
               <input type="text" placeholder="请输入图形验证码">
             </div>
+            <div class="login_btn">登录</div>
         </div>
-        <button>登录</button>
       </div>
     </div>
 </template>
@@ -50,19 +50,32 @@ export default {
          border-bottom: 2px solid #f3f1f2;
         input{
           margin-top: 30px;
-          padding-bottom: 4px;
+          padding-bottom: 10px;
           display: block;
           border: none;
           outline: none;
         }
-        .item_withcode{
-          img{
-            display: block;
-            height: 10px;
-            width: 100px;
-          }
+      }
+      .item_withcode{
+        display: flex;
+        align-items: center;
+        img{
+          height: 45px;
+          width: 200px;
         }
-        }
+      }
+    }
+    .login_btn{
+      margin-top:30px ;
+      height: 49px;
+      width: 334px;
+      text-align: center;
+      line-height: 49px;
+      color: #f3f1f2;
+     background: linear-gradient(90deg, #ecb53c, #ff9211);
+     border-radius: 39px;
+     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, .1);
+     letter-spacing: 2px;
     }
   }
 </style>
