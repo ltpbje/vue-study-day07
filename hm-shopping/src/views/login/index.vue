@@ -13,7 +13,7 @@
           </div>
           <div class="item item_withcode">
             <input type="text" placeholder="请输入图形验证码">
-            <img src="@/assets/code.png" alt="" @click="">
+            <img v-if="picUrl" :src="picUrl" alt="" @click="getPicCode">
         </div>
           <div class="item getcode">
               <input type="text" placeholder="请输入短信验证码">
@@ -29,9 +29,25 @@
 import request from '@/utils/request'
 export default {
   name: 'logIn',
+  data () {
+    return {
+      picCode: '', // 用户输入的图形验证码
+      picKey: '', // 将来请求传递的图形验证码唯一标识
+      picUrl: '' // 存储清求渲染的图片地址
+    }
+  },
   async created () {
-    const res = await request.get('/captcha/image')
-    console.log(res.data)
+    this.getPicCode()
+  },
+  methods: {
+    async getPicCode () {
+      const res = await request.get('/captcha/image')
+      const { data: { base64, key } } = res
+      // console.log(res.data)
+      // this.picCode =
+      this.picKey = key
+      this.picUrl = base64
+    }
   }
 }
 </script>
@@ -73,6 +89,7 @@ export default {
       }
       .item_withcode{
         display: flex;
+        align-items: center;
         img{
           height: 45px;
           width: 200px;
