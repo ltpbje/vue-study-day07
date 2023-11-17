@@ -13,10 +13,11 @@
           </div>
           <div class="item item_withcode">
             <input type="text" placeholder="请输入图形验证码">
-            <img src="@/assets/code.png" alt="">
+            <img src="@/assets/code.png" alt="" @click="">
         </div>
-          <div class="item ">
-              <input type="text" placeholder="请输入图形验证码">
+          <div class="item getcode">
+              <input type="text" placeholder="请输入短信验证码">
+              <div class="getcode_btn">获取短信验证码</div>
             </div>
             <div class="login_btn">登录</div>
         </div>
@@ -25,8 +26,13 @@
 </template>
 
 <script>
+import request from '@/utils/request'
 export default {
-  name: 'logIn'
+  name: 'logIn',
+  async created () {
+    const res = await request.get('/captcha/image')
+    console.log(res.data)
+  }
 }
 </script>
 
@@ -56,9 +62,17 @@ export default {
           outline: none;
         }
       }
-      .item_withcode{
+      .getcode{
         display: flex;
         align-items: center;
+        .getcode_btn{
+          padding-top:10px ;
+          font-size: 13px;
+          color: #cea26a;
+        }
+      }
+      .item_withcode{
+        display: flex;
         img{
           height: 45px;
           width: 200px;
