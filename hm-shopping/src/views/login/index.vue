@@ -17,7 +17,7 @@
         </div>
           <div class="item getcode">
               <input type="text" placeholder="请输入短信验证码">
-              <div class="getcode_btn">获取短信验证码</div>
+              <div class="getcode_btn" @click="getCode">{{totalSecond == Second ? '获取短信验证码' : `重新发送(${Second}s)后` }}</div>
             </div>
             <div class="login_btn">登录</div>
         </div>
@@ -26,14 +26,18 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+// import request from '@/utils/request'
+import { getPicCode } from '@/api/login'
 export default {
   name: 'logIn',
   data () {
     return {
       picCode: '', // 用户输入的图形验证码
       picKey: '', // 将来请求传递的图形验证码唯一标识
-      picUrl: '' // 存储清求渲染的图片地址
+      picUrl: '', // 存储清求渲染的图片地址
+      totalSecond: 5,
+      Second: 5,
+      timer: null
     }
   },
   async created () {
@@ -41,13 +45,38 @@ export default {
   },
   methods: {
     async getPicCode () {
-      const res = await request.get('/captcha/image')
+      const res = await getPicCode()
       const { data: { base64, key } } = res
       // console.log(res.data)
       // this.picCode =
       this.picKey = key
       this.picUrl = base64
+      // this.$toast('验证码获取成功')
+      // this.$toast({
+      //   message: '验证码获取成功',
+      //   position: 'bottom'
+      // })
+      // this.$toast.loading({
+      //   message: '加载中...',
+      //   forbidClick: false
+      // })
+    },
+    getCode () {
+      if (!this.timer && this.totalSecond === this.Second) { // 设置定时器
+        this.timer = setInterval(() => {
+          this.Second--
+          if (this.Second <= 0) {
+            this.Second = this.totalSecond
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
     }
+
+  },
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>
