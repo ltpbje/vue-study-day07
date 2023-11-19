@@ -9,17 +9,17 @@
         </div>
         <div class="content">
           <div class="item">
-            <input type="text" placeholder="请输入手机号">
+            <input type="text" v-model="mobile" placeholder="请输入手机号">
           </div>
           <div class="item item_withcode">
-            <input type="text" placeholder="请输入图形验证码">
+            <input v-model="picCode" type="text" placeholder="请输入图形验证码">
             <img v-if="picUrl" :src="picUrl" alt="" @click="getPicCode">
         </div>
           <div class="item getcode">
-              <input type="text" placeholder="请输入短信验证码">
+              <input type="text" v-model="smsCode" placeholder="请输入短信验证码">
               <div class="getcode_btn" @click="getCode">{{totalSecond == Second ? '获取短信验证码' : `重新发送(${Second}s)后` }}</div>
             </div>
-            <div class="login_btn">登录</div>
+            <div @click="setLogin" class="login_btn">登录</div>
         </div>
       </div>
     </div>
@@ -27,15 +27,17 @@
 
 <script>
 // import request from '@/utils/request'
-import { getPicCode } from '@/api/login'
+import { getMsgCode, getPicCode, getLogin } from '@/api/login'
 export default {
   name: 'logIn',
   data () {
     return {
+      mobile: '',
       picCode: '', // 用户输入的图形验证码
       picKey: '', // 将来请求传递的图形验证码唯一标识
       picUrl: '', // 存储清求渲染的图片地址
       totalSecond: 5,
+      smsCode: '',
       Second: 5,
       timer: null
     }
@@ -61,7 +63,24 @@ export default {
       //   forbidClick: false
       // })
     },
-    getCode () {
+    // 校验手机号和验证码
+    validCode () {
+      if (!/^1[3-9]\d{9}$/.test(this.mobile)) {
+        this.$toast('手机号格式错误')
+        return false
+      }
+      if (!/^\w{4}$/.test(this.picCode)) {
+        this.$toast('验证码格式错误')
+        return false
+      }
+      return true
+    },
+    async getCode () {
+      if (!this.validCode()) {
+        return false
+      }
+      const res = await getMsgCode(this.picCode, this.picKey, this.mobile)
+      console.log(res)
       if (!this.timer && this.totalSecond === this.Second) { // 设置定时器
         this.timer = setInterval(() => {
           this.Second--
@@ -72,6 +91,12 @@ export default {
           }
         }, 1000)
       }
+    },
+    async setLogin () {
+      const res = await getLogin(this.mobile, this.smsCode)
+      console.log(res)
+      this.$toast('登录成功')
+      this.$router.push('/')
     }
 
   },
