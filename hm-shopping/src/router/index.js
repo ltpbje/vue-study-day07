@@ -6,6 +6,7 @@ import myorder from '@/views/myorder'
 import pay from '@/views/pay'
 import prodetail from '@/views/prodetail'
 import search from '@/views/search'
+import store from '@/store'
 
 import home from '@/views/layout/home'
 import category from '@/views/layout/category'
@@ -32,6 +33,23 @@ const router = new VueRouter({
     { path: '/prodetail/:id', component: prodetail },
     { path: '/search', component: search }
   ]
+})
+// 路由导航守卫
+const authUrl = ['/pay', '/myorder']
+router.beforeEach((to, from, next) => {
+  if (!authUrl.includes(to.path)) {
+    // 非权限页面直接放行
+    next()
+    return
+  }
+  // 权限页面判断token
+  const token = store.getters.token
+  console.log(token)
+  if (token) {
+    next()
+  } else {
+    next('/login')
+  }
 })
 
 export default router
