@@ -12,6 +12,7 @@ import home from '@/views/layout/home'
 import category from '@/views/layout/category'
 import cart from '@/views/layout/cart'
 import user from '@/views/layout/user'
+import searchlist from '@/views/searchlist'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -31,7 +32,8 @@ const router = new VueRouter({
     { path: '/myorder', component: myorder },
     { path: '/pay', component: pay },
     { path: '/prodetail/:id', component: prodetail },
-    { path: '/search', component: search }
+    { path: '/search', component: search },
+    { path: '/searchlist', component: searchlist }
   ]
 })
 // 路由导航守卫
