@@ -16,7 +16,7 @@
         </div>
 
         <div class="goods-list">
-            <GoodsItem v-for="item in 10" :key="item"></GoodsItem>
+            <GoodsItem v-for="item in goodsList" :key="item.goods_id" :item="item"></GoodsItem>
         </div>
     </div>
 </template>
@@ -32,7 +32,8 @@ export default {
   data () {
     return {
       querySearch: this.$route.query.search,
-      page: 1
+      page: 1,
+      goodsList: []
     }
   },
   async created () {
@@ -41,8 +42,8 @@ export default {
       goodsName: this.querySearch,
       page: this.page
     })
-    // const {} = res
-    console.log(res)
+    const { data: { list: { data } } } = res
+    this.goodsList = data
   }
 }
 </script>
