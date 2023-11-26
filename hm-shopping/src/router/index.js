@@ -12,7 +12,7 @@ import home from '@/views/layout/home'
 import category from '@/views/layout/category'
 import cart from '@/views/layout/cart'
 import user from '@/views/layout/user'
-import searchlist from '@/views/searchlist'
+import searchlist from '@/views/search/list.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
