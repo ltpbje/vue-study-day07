@@ -39,6 +39,7 @@ export default {
   async created () {
     // console.log(1)
     const res = await getGoodsList({
+      categoryId: this.$route.query.categoryId,
       goodsName: this.querySearch,
       page: this.page
     })
