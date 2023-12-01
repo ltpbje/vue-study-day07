@@ -3,12 +3,12 @@
     <van-nav-bar fixed title="商品详情页" left-arrow @click-left="$router.go(-1)" />
 
     <van-swipe :autoplay="3000" @change="onChange">
-      <van-swipe-item v-for="(image, index) in images" :key="index">
-        <img :src="image" />
+      <van-swipe-item v-for="(image, index) in goodsDetail.goods_images" :key="index">
+        <img :src="image.external_url" />
       </van-swipe-item>
 
       <template #indicator>
-        <div class="custom-indicator">{{ current + 1 }} / {{ images.length }}</div>
+        <div class="custom-indicator">{{ current + 1 }} / {{  images.length }}</div>
       </template>
     </van-swipe>
 
@@ -16,14 +16,13 @@
     <div class="info">
       <div class="title">
         <div class="price">
-          <span class="now">￥0.01</span>
-          <span class="oldprice">￥6699.00</span>
+          <span class="now">￥{{goodsDetail.goods_price_max}}</span>
+          <span class="oldprice">￥{{goodsDetail.line_price_max}}</span>
         </div>
-        <div class="sellcount">已售1001件</div>
+        <div class="sellcount">已售{{goodsDetail.goods_sales}}件</div>
       </div>
       <div class="msg text-ellipsis-2">
-        三星手机 SAMSUNG Galaxy S23 8GB+256GB 超视觉夜拍系统 超清夜景 悠雾紫 5G手机 游戏拍照旗舰机s23
-      </div>
+        {{goodsDetail.goods_name}}</div>
 
       <div class="service">
         <div class="left-words">
@@ -84,22 +83,30 @@
 </template>
 
 <script>
+import { getProDetail } from '@/api/product'
 export default {
   name: 'ProDetail',
   data () {
     return {
-      images: [
-        'https://img01.yzcdn.cn/vant/apple-1.jpg',
-        'https://img01.yzcdn.cn/vant/apple-2.jpg'
-      ],
+      images: [],
       current: 0,
-      goodsId: this.$route.params.id
+      goodsId: this.$route.params.id,
+      goodsDetail: ''
     }
   },
   methods: {
     onChange (index) {
       this.current = index
+    },
+    async getProDetail () {
+      const { data: { detail } } = await getProDetail(this.goodsId)
+      // console.log(detail)
+      this.goodsDetail = detail
+      this.images = detail.goods_images
     }
+  },
+  async  created () {
+    this.getProDetail()
   }
 }
 </script>
