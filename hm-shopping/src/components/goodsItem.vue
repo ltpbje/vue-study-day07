@@ -9,8 +9,8 @@
             </p>
             <p class="count">已售{{item.goods_sales}}件</p>
             <p class="price">
-                <span class="new">¥{{item.line_price_max }}</span>
-                <span class="old">¥{{ item.goods_price_min }}</span>
+                <span class="new">¥{{item.goods_price_max }}</span>
+                <span class="old">¥{{ item.line_price_max }}</span>
             </p>
         </div>
     </div>
