@@ -38,21 +38,21 @@
     <!-- 商品评价 -->
     <div class="comment">
       <div class="comment-title">
-        <div class="left">商品评价 (5条)</div>
+        <div class="left">商品评价 ({{ commentTotal }}条)</div>
         <div class="right">查看更多 <van-icon name="arrow" /> </div>
       </div>
       <div class="comment-list">
-        <div class="comment-item" v-for="item in 3" :key="item">
+        <div class="comment-item" v-for="item in commentList" :key="item.comment_id">
           <div class="top">
-            <img src="http://cba.itlike.com/public/uploads/10001/20230321/a0db9adb2e666a65bc8dd133fbed7834.png" alt="">
-            <div class="name">神雕大侠</div>
-            <van-rate :size="16" :value="5" color="#ffd21e" void-icon="star" void-color="#eee" />
+            <img :src="item.user.avatar_url || defaultAvatar " alt="">
+            <div class="name">{{ item.user.nick_name }}</div>
+            <van-rate :size="16" :value="item.score / 2" color="#ffd21e" void-icon="star" void-color="#eee" />
           </div>
           <div class="content">
-            质量很不错 挺喜欢的
+            {{item.content}}
           </div>
           <div class="time">
-            2023-03-21 15:01:35
+          {{item.create_time }}
           </div>
         </div>
       </div>
@@ -79,7 +79,8 @@
 </template>
 
 <script>
-import { getProDetail } from '@/api/product'
+import { getProDetail, getComment } from '@/api/product'
+import defaultAvatar from '@/assets/default-avatar.png'
 export default {
   name: 'ProDetail',
   data () {
@@ -87,7 +88,11 @@ export default {
       images: [],
       current: 0,
       goodsId: this.$route.params.id,
-      goodsDetail: ''
+      goodsDetail: '',
+      limit: 3,
+      commentList: [],
+      commentTotal: 0,
+      defaultAvatar
     }
   },
   methods: {
@@ -99,10 +104,22 @@ export default {
       // console.log(detail)
       this.goodsDetail = detail
       this.images = detail.goods_images
+    },
+    async getComment () {
+      // const res = getComment(this.goodsId, this.limit)
+      const { data: { list, total } } = await getComment(this.goodsId, this.limit)
+      // console.log(list, total)
+      // console.log(res)
+      // console.log(list)
+      console.log(1, list, total)
+      this.commentList = list
+      this.commentTotal = total
+      // console.log(total)
     }
   },
   async  created () {
     this.getProDetail()
+    this.getComment()
   }
 }
 </script>
