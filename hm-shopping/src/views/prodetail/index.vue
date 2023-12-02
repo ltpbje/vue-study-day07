@@ -72,9 +72,37 @@
         <van-icon name="shopping-cart-o" />
         <span>购物车</span>
       </div>
-      <div class="btn-add">加入购物车</div>
-      <div class="btn-buy">立刻购买</div>
+      <div class="btn-add" @click="addFn()">加入购物车</div>
+      <div class="btn-buy" @click="buyNow()">立刻购买</div>
     </div>
+   <van-action-sheet v-model="showPannel" :title="mode === 'cart' ? '加入购物车' : '立刻购买'">
+    <div class="product">
+      <div class="product-title">
+        <div class="left">
+          <img :src="goodsDetail.goods_image">
+        </div>
+        <div class="right">
+          <div class="price">
+            <span>¥</span>
+            <span class="nowprice">{{goodsDetail.goods_price_min}}</span>
+          </div>
+          <div class="count">
+            <span>库存</span>
+            <span>{{goodsDetail.stock_total}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="num-box">
+        <span>数量</span>
+        数字框占位
+      </div>
+      <div class="showbtn" v-if="goodsDetail.stock_total > 0">
+        <div class="btn" v-if="mode === 'cart'">加入购物车</div>
+        <div class="btn now" v-else>立刻购买</div>
+      </div>
+      <div class="btn-none" v-else>该商品已抢完</div>
+    </div>
+  </van-action-sheet>
   </div>
 </template>
 
@@ -92,16 +120,27 @@ export default {
       limit: 3,
       commentList: [],
       commentTotal: 0,
-      defaultAvatar
+      defaultAvatar,
+      showPannel: false,
+      mode: 'cart'
     }
   },
   methods: {
+    addFn () {
+      this.showPannel = true
+      this.mode = 'cart'
+    },
+    buyNow () {
+      this.showPannel = true
+      this.mode = 'buynow'
+    },
     onChange (index) {
       this.current = index
     },
     async getProDetail () {
       const { data: { detail } } = await getProDetail(this.goodsId)
       // console.log(detail)
+      console.log(1, detail)
       this.goodsDetail = detail
       this.images = detail.goods_images
     },
@@ -111,7 +150,7 @@ export default {
       // console.log(list, total)
       // console.log(res)
       // console.log(list)
-      console.log(1, list, total)
+      // console.log(1, list, total)
       this.commentList = list
       this.commentTotal = total
       // console.log(total)
@@ -291,7 +330,53 @@ export default {
     }
   }
 }
+.product {
+  .product-title {
+    display: flex;
+    .left {
+      img {
+        width: 90px;
+        height: 90px;
+      }
+      margin: 10px;
+    }
+    .right {
+      flex: 1;
+      padding: 10px;
+      .price {
+        font-size: 14px;
+        color: #fe560a;
+        .nowprice {
+          font-size: 24px;
+          margin: 0 5px;
+        }
+      }
+    }
+  }
 
+  .num-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .btn, .btn-none {
+    height: 40px;
+    line-height: 40px;
+    margin: 20px;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 148, 2);
+  }
+  .btn.now {
+    background-color: #fe5630;
+  }
+  .btn-none {
+    background-color: #cccccc;
+  }
+}
 .tips {
   padding: 10px;
 }</style>
