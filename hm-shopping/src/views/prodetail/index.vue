@@ -94,8 +94,8 @@
       </div>
       <div class="num-box">
         <span>数量</span>
-        数字框占位
-      </div>
+    <countBox v-model="value"></countBox>
+  </div>
       <div class="showbtn" v-if="goodsDetail.stock_total > 0">
         <div class="btn" v-if="mode === 'cart'">加入购物车</div>
         <div class="btn now" v-else>立刻购买</div>
@@ -109,8 +109,12 @@
 <script>
 import { getProDetail, getComment } from '@/api/product'
 import defaultAvatar from '@/assets/default-avatar.png'
+import countBox from '@/components/countBox.vue'
 export default {
   name: 'ProDetail',
+  components: {
+    countBox
+  },
   data () {
     return {
       images: [],
@@ -122,7 +126,8 @@ export default {
       commentTotal: 0,
       defaultAvatar,
       showPannel: false,
-      mode: 'cart'
+      mode: 'cart',
+      value: 1
     }
   },
   methods: {
