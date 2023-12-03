@@ -68,10 +68,12 @@
         <van-icon name="wap-home-o" />
         <span>首页</span>
       </div>
-      <div class="icon-cart">
-        <van-icon name="shopping-cart-o" />
-        <span>购物车</span>
-      </div>
+      <!-- 购物车图标 -->
+     <div class="icon-cart">
+      <span v-if="cartTotal > 0" class="num">{{ cartTotal }}</span>
+      <van-icon name="shopping-cart-o" />
+      <span>购物车</span>
+     </div>
       <div class="btn-add" @click="addFn()">加入购物车</div>
       <div class="btn-buy" @click="buyNow()">立刻购买</div>
     </div>
@@ -94,7 +96,7 @@
       </div>
       <div class="num-box">
         <span>数量</span>
-    <countBox v-model="value"></countBox>
+    <countBox v-model="addCount"></countBox>
   </div>
       <div class="showbtn" v-if="goodsDetail.stock_total > 0">
         <div class="btn" @click="addCart" v-if="mode === 'cart'">加入购物车</div>
@@ -110,6 +112,8 @@
 import { getProDetail, getComment } from '@/api/product'
 import defaultAvatar from '@/assets/default-avatar.png'
 import countBox from '@/components/countBox.vue'
+import { addCart } from '@/api/cart'
+import { Toast } from 'vant'
 export default {
   name: 'ProDetail',
   components: {
@@ -127,12 +131,13 @@ export default {
       defaultAvatar,
       showPannel: false,
       mode: 'cart',
-      value: 1
+      addCount: 1, // 添加数量
+      cartTotal: 1 // 购物车中商品的数量
     }
   },
   methods: {
     // 加入购物车 如果未登录跳转到登录页面
-    addCart () {
+    async addCart () {
       if (!this.$store.getters.token) {
         this.$dialog.confirm({
           title: '温馨提示',
@@ -153,7 +158,14 @@ export default {
             // on cancel
           })
       }
-      console.log('成功')
+      // 如果有token 则发送请求 更新后台购物车数据 并更新显示到页面中
+      const res = await addCart(this.goodsId, this.addCount,
+        this.goodsDetail.skuList[0].goods_sku_id)
+      console.log(res)
+      this.cartTotal = res.data.cartTotal
+      this.showPannel = false
+      Toast('添加购物车成功')
+      // console.log('成功')
     },
     addFn () {
       this.showPannel = true
@@ -199,7 +211,22 @@ export default {
   ::v-deep .van-icon-arrow-left {
     color: #333;
   }
-
+.footer .icon-cart {
+  position: relative;
+  padding: 0 6px;
+  .num {
+    z-index: 999;
+    position: absolute;
+    top: -2px;
+    right: 0;
+    min-width: 16px;
+    padding: 0 4px;
+    color: #fff;
+    text-align: center;
+    background-color: #ee0a24;
+    border-radius: 50%;
+  }
+}
   img {
     display: block;
     width: 100%;
