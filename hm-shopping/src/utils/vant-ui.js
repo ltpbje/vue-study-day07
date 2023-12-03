@@ -1,6 +1,7 @@
 import Vue from 'vue'
 // 自动按需引入vant组件
-import { ActionSheet, Rate, Search, Swipe, SwipeItem, Grid, GridItem, Toast, Button, Switch, Tabbar, TabbarItem, NavBar, Icon } from 'vant'
+import { Dialog, ActionSheet, Rate, Search, Swipe, SwipeItem, Grid, GridItem, Toast, Button, Switch, Tabbar, TabbarItem, NavBar, Icon } from 'vant'
+Vue.use(Dialog)
 Vue.use(Icon)
 Vue.use(ActionSheet)
 Vue.use(Search)
