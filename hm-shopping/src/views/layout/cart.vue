@@ -4,7 +4,7 @@
     <!-- 购物车开头 -->
     <div class="cart-title">
       <span class="all">共<i>{{cartTotal}}</i>件商品</span>
-      <span class="edit">
+      <span @click="isEdit = !isEdit" class="edit">
         <van-icon name="edit" />
         编辑
       </span>
@@ -39,7 +39,7 @@
           <span>合计：</span>
           <span>¥ <i class="totalPrice">{{selPrice}}</i></span>
         </div>
-        <div v-if="true" class="goPay" :class="{disabled :selCount === 0}">结算({{ selCount }})</div>
+        <div v-if="!isEdit" class="goPay" :class="{disabled :selCount === 0}">结算({{ selCount }})</div>
         <div v-else class="delete" :class="{ disabled: selCount === 0 }">删除</div>
       </div>
     </div>
@@ -53,6 +53,20 @@ export default {
   name: 'CartPage',
   components: {
     countBox
+  },
+  data () {
+    return {
+      isEdit: false
+    }
+  },
+  watch: {
+    isEdit (value) {
+      if (value) {
+        this.$store.commit('cart/toggleAllChecked', false)
+      } else {
+        this.$store.commit('cart/toggleAllChecked', true)
+      }
+    }
   },
   methods: {
     toggleChecked (goodsId) {
