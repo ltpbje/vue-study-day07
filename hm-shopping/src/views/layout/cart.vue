@@ -13,7 +13,7 @@
     <!-- 购物车列表 -->
     <div class="cart-list">
       <div class="cart-item" v-for="item in this.cartList" :key="item.id">
-        <van-checkbox :value="item.isChecked"></van-checkbox>
+        <van-checkbox @click="toggleChecked(item.id)" :value="item.isChecked"></van-checkbox>
         <div class="show">
           <img :src="item.goods.goods_image" alt="">
         </div>
@@ -21,15 +21,16 @@
           <span class="tit text-ellipsis-2">{{item. goods.goods_name }}</span>
           <span class="bottom">
             <div class="price">¥ <span>{{item.goods.goods_price_min }}</span></div>
-            <countBox :value="item.goods_num"></countBox>
+            <!--既希望保留原本的形参，又需要通过调用函数传参=>箭头函数包装一层-->
+            <countBox @input="(num)=> changeCount(num,item.goods_id,item.goods_sku_id)" :value="item.goods_num"></countBox>
           </span>
         </div>
       </div>
     </div>
 
     <div class="footer-fixed">
-      <div class="all-check">
-        <van-checkbox icon-size="18"></van-checkbox>
+      <div @click="toggleAllChecked" class="all-check">
+        <van-checkbox :value="isAllChecked" icon-size="18"></van-checkbox>
         全选
       </div>
 
@@ -53,9 +54,20 @@ export default {
   components: {
     countBox
   },
+  methods: {
+    toggleChecked (goodsId) {
+      this.$store.commit('cart/toggleChecked', goodsId)
+    },
+    toggleAllChecked () {
+      this.$store.commit('cart/toggleAllChecked', !this.isAllChecked)
+    },
+    changeCount (goodsNum, goodsId, goodsSkuid) {
+      this.$store.dispatch('cart/changeCount', { goodsNum, goodsId, goodsSkuid })
+    }
+  },
   computed: {
     ...mapState('cart', ['cartList']),
-    ...mapGetters('cart', ['cartTotal', 'selPrice', 'selCount', 'selCartList'])
+    ...mapGetters('cart', ['cartTotal', 'selPrice', 'selCount', 'selCartList', 'isAllChecked'])
   },
   created () {
     if (this.$store.getters.token) {

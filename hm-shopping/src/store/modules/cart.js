@@ -1,4 +1,4 @@
-import { getCartList } from '@/api/cart'
+import { getCartList, changeCount } from '@/api/cart'
 export default {
   namespaced: true,
   state () {
@@ -27,12 +27,30 @@ export default {
       return getters.selCartList.reduce((sum, item) => {
         return sum + item.goods_num * item.goods.goods_price_min
       }, 0)
+    },
+    // 是否全选
+    isAllChecked (state) {
+      return state.cartList.every(item => item.isChecked)
     }
 
   },
   mutations: {
     setCartList (state, newCartList) {
       state.cartList = newCartList
+    },
+    toggleChecked (state, goodsId) {
+      const goods = state.cartList.find(item => item.id === goodsId)
+      goods.isChecked = !goods.isChecked
+    },
+    // 实现全选反选
+    toggleAllChecked (state, isAllChecked) {
+      state.cartList.forEach(item => { item.isChecked = isAllChecked })
+    },
+    changeCount (state, obj) {
+      const { goodsNum, goodsId } = obj
+      const goods = state.cartList.find(item => item.goods_id === goodsId)
+      // console.log(1, goods)
+      goods.goods_num = goodsNum
     }
   },
   actions: {
@@ -45,6 +63,16 @@ export default {
       })
       console.log(1, data)
       context.commit('setCartList', data.list)
+    },
+    // 修改商品数量
+    async changeCount (context, obj) {
+      const { goodsNum, goodsId, goodsSkuid } = obj
+      // 先修改界面数据
+      context.commit('changeCount', obj)
+
+      // 再将数据同步到后台
+      await changeCount(goodsNum, goodsId, goodsSkuid)
+      // console.log(res)
     }
   }
 
