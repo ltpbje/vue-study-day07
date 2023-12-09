@@ -40,7 +40,7 @@
           <span>¥ <i class="totalPrice">{{selPrice}}</i></span>
         </div>
         <div v-if="!isEdit" class="goPay" :class="{disabled :selCount === 0}">结算({{ selCount }})</div>
-        <div v-else class="delete" :class="{ disabled: selCount === 0 }">删除</div>
+        <div v-else class="delete" @click="delSelect" :class="{ disabled: selCount === 0 }">删除</div>
       </div>
     </div>
   </div>
@@ -77,6 +77,12 @@ export default {
     },
     changeCount (goodsNum, goodsId, goodsSkuid) {
       this.$store.dispatch('cart/changeCount', { goodsNum, goodsId, goodsSkuid })
+    },
+    delSelect () {
+      if (this.$store.getters.selCount === 0) return
+      // console.log('点击了')
+      this.$store.dispatch('cart/delSelect')
+      this.isEdit = false
     }
   },
   computed: {

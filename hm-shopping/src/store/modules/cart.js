@@ -1,4 +1,4 @@
-import { getCartList, changeCount } from '@/api/cart'
+import { getCartList, changeCount, delSelect } from '@/api/cart'
 export default {
   namespaced: true,
   state () {
@@ -73,6 +73,17 @@ export default {
       // 再将数据同步到后台
       await changeCount(goodsNum, goodsId, goodsSkuid)
       // console.log(res)
+    },
+    // 删除选中的商品
+    async delSelect (context) {
+      const selectId = context.getters.selCartList.map(item => item.id)
+      console.log('context', context)
+      console.log(2, selectId)
+      // 修改后台的数据
+      await delSelect(selectId)
+      // 修改界面中的数据
+      // 重新拉取最新的购物车数据(重新渲染)
+      context.dispatch('getCartAction')
     }
   }
 
