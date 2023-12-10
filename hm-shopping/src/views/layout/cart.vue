@@ -10,6 +10,7 @@
       </span>
     </div>
 
+  <div v-if="isLogin && cartList.length >0">
     <!-- 购物车列表 -->
     <div class="cart-list">
       <div class="cart-item" v-for="item in this.cartList" :key="item.id">
@@ -27,7 +28,6 @@
         </div>
       </div>
     </div>
-
     <div class="footer-fixed">
       <div @click="toggleAllChecked" class="all-check">
         <van-checkbox :value="isAllChecked" icon-size="18"></van-checkbox>
@@ -44,6 +44,14 @@
       </div>
     </div>
   </div>
+  <div class="empty-cart" v-else>
+    <img src="@/assets/empty.png" alt="">
+    <div class="tips">
+      您的购物车是空的, 快去逛逛吧
+    </div>
+    <div class="btn" @click="$router.push('/')">去逛逛</div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -87,7 +95,10 @@ export default {
   },
   computed: {
     ...mapState('cart', ['cartList']),
-    ...mapGetters('cart', ['cartTotal', 'selPrice', 'selCount', 'selCartList', 'isAllChecked'])
+    ...mapGetters('cart', ['cartTotal', 'selPrice', 'selCount', 'selCartList', 'isAllChecked']),
+    isLogin () {
+      return this.$store.getters.token
+    }
   },
   created () {
     if (this.$store.getters.token) {
@@ -99,6 +110,33 @@ export default {
 
 <style lang="less" scoped>
 // 主题 padding
+
+// 空购物车样式
+.empty-cart {
+  padding: 80px 30px;
+  img {
+    width: 140px;
+    height: 92px;
+    display: block;
+    margin: 0 auto;
+  }
+  .tips {
+    text-align: center;
+    color: #666;
+    margin: 30px;
+  }
+  .btn {
+    width: 110px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background-color: #fa2c20;
+    border-radius: 16px;
+    color: #fff;
+    display: block;
+    margin: 0 auto;
+  }
+}
 .cart {
   padding-top: 46px;
   padding-bottom: 100px;

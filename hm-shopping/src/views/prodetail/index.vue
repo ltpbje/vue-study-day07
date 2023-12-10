@@ -114,6 +114,7 @@ import defaultAvatar from '@/assets/default-avatar.png'
 import countBox from '@/components/countBox.vue'
 import { addCart } from '@/api/cart'
 import { Toast } from 'vant'
+// import { cartTotal } from 'vuex'
 export default {
   name: 'ProDetail',
   components: {
@@ -132,7 +133,7 @@ export default {
       showPannel: false,
       mode: 'cart',
       addCount: 1, // 添加数量
-      cartTotal: 1 // 购物车中商品的数量
+      cartTotal: this.$store.getters.cartTotal// 购物车中商品的数量
     }
   },
   methods: {
