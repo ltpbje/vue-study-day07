@@ -100,7 +100,7 @@
   </div>
       <div class="showbtn" v-if="goodsDetail.stock_total > 0">
         <div class="btn" @click="addCart" v-if="mode === 'cart'">加入购物车</div>
-        <div class="btn now" v-else>立刻购买</div>
+        <div class="btn now" @click="goBuyNow" v-else>立刻购买</div>
       </div>
       <div class="btn-none" v-else>该商品已抢完</div>
     </div>
@@ -196,6 +196,19 @@ export default {
       this.commentList = list
       this.commentTotal = total
       // console.log(total)
+    },
+    // 跳转到订单页面
+    // 并通过查询参数传参
+    goBuyNow () {
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.goodsId,
+          goodsNum: this.addCount,
+          goodsSkuId: this.goodsDetail.skuList[0].goods_sku_id
+        }
+      })
     }
   },
   async  created () {

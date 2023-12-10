@@ -107,9 +107,11 @@ export default {
     }
   },
   computed: {
+    // 默认选中第一个地址
     selectedAddress () {
       return this.addressList[0]
     },
+    // 完整地址
     longAddress () {
       return this.selectedAddress.region.province + ' ' + this.selectedAddress.region.city + ' ' + this.selectedAddress.region.region + ' ' + this.selectedAddress.detail
     },
@@ -118,21 +120,43 @@ export default {
     },
     cartIds () {
       return this.$route.query.cartIds
+    },
+    goodsId () {
+      return this.$route.query.goodsId
+    },
+    goodsNum () {
+      return this.$route.query.goodsNum
+    },
+    goodsSkuId () {
+      return this.$route.query.goodsSkuId
     }
   },
   methods: {
+    // 获取默认地址数据
     async getAddressList () {
       const { data: { list } } = await getAddressList()
       this.addressList = list
     },
     // 获取订单列表数据
     async getOrderList () {
-      const { data: { order, personal } } = await checkOrder(this.mode, {
-        cartIds: this.cartIds
-      })
-      this.orderList = order
-      this.personal = personal
-      console.log('得到订单列表', order, personal)
+      if (this.mode === 'cart') {
+        const { data: { order, personal } } = await checkOrder(this.mode, {
+          cartIds: this.cartIds
+        })
+        this.orderList = order
+        this.personal = personal
+        console.log('得到订单列表', order, personal)
+      }
+      if (this.mode === 'buyNow') {
+        const { data: { order, personal } } = await checkOrder(this.mode, {
+          goodsId: this.goodsId,
+          goodsNum: this.goodsNum,
+          goodsSkuId: this.goodsSkuId
+        })
+        this.orderList = order
+        this.personal = personal
+        console.log('得到订单列表', order, personal)
+      }
     }
   },
   created () {
