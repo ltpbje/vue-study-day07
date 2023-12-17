@@ -40,7 +40,7 @@
               {{item.goods_name }}</p>
             <p class="info">
               <span class="count">x{{item.total_num }}</span>
-              <span class="price">¥{{item.total_price }}</span>
+              <span class="price">¥{{item.goods_price}}</span>
             </p>
           </div>
         </div>
@@ -88,14 +88,15 @@
     <!-- 底部提交 -->
     <div class="footer-fixed">
       <div class="left">实付款：<span>￥{{orderList.orderTotalPrice }}</span></div>
-      <div class="tipsbtn">提交订单</div>
+      <div class="tipsbtn" @click="submitOrder">提交订单</div>
     </div>
   </div>
 </template>
 
 <script>
 import { getAddressList } from '@/api/address'
-import { checkOrder } from '@/api/order'
+import { checkOrder, submitOrder } from '@/api/order'
+import { Toast } from 'vant'
 
 export default {
   name: 'PayIndex',
@@ -139,6 +140,7 @@ export default {
     },
     // 获取订单列表数据
     async getOrderList () {
+      // 从购物车跳转过来的 因为跳转传递的参数不同 发请求所需要的参数是不同的
       if (this.mode === 'cart') {
         const { data: { order, personal } } = await checkOrder(this.mode, {
           cartIds: this.cartIds
@@ -147,6 +149,7 @@ export default {
         this.personal = personal
         console.log('得到订单列表', order, personal)
       }
+      // 从商品详情页立即购买跳转过来的 因为跳转传递的参数不同 发请求所需要的参数是不同的
       if (this.mode === 'buyNow') {
         const { data: { order, personal } } = await checkOrder(this.mode, {
           goodsId: this.goodsId,
@@ -157,6 +160,25 @@ export default {
         this.personal = personal
         console.log('得到订单列表', order, personal)
       }
+    },
+    // 提交订单
+    async submitOrder () {
+      if (this.mode === 'cart') {
+        await submitOrder(this.mode, {
+          cartIds: this.cartIds
+        })
+      }
+      if (this.mode === 'buyNow') {
+        console.log('goodsId', this.goodsId)
+        await submitOrder(this.mode, {
+          goodsId: this.goodsId,
+          goodsNum: this.goodsNum,
+          goodsSkuId: this.goodsSkuId,
+          remark: '发快点'
+        })
+      }
+      Toast.success('提交订单成功')
+      this.$router.replace('/myorder')
     }
   },
   created () {

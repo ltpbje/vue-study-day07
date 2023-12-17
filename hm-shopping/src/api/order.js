@@ -14,3 +14,15 @@ export const checkOrder = (mode, obj) => {
     }
   })
 }
+export const submitOrder = (mode, obj) => {
+  return request.post('/checkout/submit', {
+    params: {
+      mode,
+      delivery: 10, // 物流方式 10
+      couponId: 0, // 优惠券id,默认：0
+      isUsePoints: 0, // 是否使用积分1-使用，0-不使用
+      payType: 10, // 支付方式，10：余额支付
+      ...obj
+    }
+  })
+}

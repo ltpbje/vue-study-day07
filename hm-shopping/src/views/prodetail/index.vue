@@ -114,9 +114,11 @@ import defaultAvatar from '@/assets/default-avatar.png'
 import countBox from '@/components/countBox.vue'
 import { addCart } from '@/api/cart'
 import { Toast } from 'vant'
+import loginConfirm from '@/mixins/loginConfirm'
 // import { cartTotal } from 'vuex'
 export default {
   name: 'ProDetail',
+  mixins: [loginConfirm],
   components: {
     countBox
   },
@@ -137,27 +139,38 @@ export default {
     }
   },
   methods: {
+    // 返回true表示弹出了提示框 返回false表示没有弹出提示框
+    // 如果没有token 则弹出提示框 提醒用户登录
+    // loginConfirm () {
+    //   // 组件内的方法复用 可能其他组件也需要使用该方法 所以要使用mixins
+    //   if (!this.$store.getters.token) {
+    //     this.$dialog.confirm({
+    //       title: '温馨提示',
+    //       message: '请先登录才能加入购物车',
+    //       confirmButtonText: '请登录',
+    //       cancelButtonText: '再逛逛'
+    //     })
+    //       .then(() => {
+    //         this.$router.replace({
+    //           path: '/login',
+    //           query: {
+    //             // 通过查询参数传参传递当前地址
+    //             backUrl: this.$route.fullPath
+    //           }
+    //         })
+    //       })
+    //       .catch(() => {
+    //         // on cancel
+    //       })
+    //     return true
+    //   }
+    //   return false
+    // },
     // 加入购物车 如果未登录跳转到登录页面
     async addCart () {
-      if (!this.$store.getters.token) {
-        this.$dialog.confirm({
-          title: '温馨提示',
-          message: '请先登录才能加入购物车',
-          confirmButtonText: '请登录',
-          cancelButtonText: '再逛逛'
-        })
-          .then(() => {
-            this.$router.replace({
-              path: '/login',
-              query: {
-                // 通过查询参数传参传递当前地址
-                backUrl: this.$route.fullPath
-              }
-            })
-          })
-          .catch(() => {
-            // on cancel
-          })
+    // 如果没有token 则弹出提示框 提醒用户登录
+      if (this.loginConfirm()) {
+        return
       }
       // 如果有token 则发送请求 更新后台购物车数据 并更新显示到页面中
       const res = await addCart(this.goodsId, this.addCount,
@@ -200,6 +213,9 @@ export default {
     // 跳转到订单页面
     // 并通过查询参数传参
     goBuyNow () {
+      if (this.loginConfirm()) {
+        return
+      }
       this.$router.push({
         path: '/pay',
         query: {
@@ -214,6 +230,7 @@ export default {
   async  created () {
     this.getProDetail()
     this.getComment()
+    // this.sayHi()
   }
 }
 </script>
