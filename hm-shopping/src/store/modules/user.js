@@ -13,7 +13,15 @@ export default {
       setInfo(obj)
     }
   },
-  getters: {},
-  actions: {}
+  getters: {
+  },
+  actions: {
+    logout (context) {
+      // 清除用户信息
+      context.commit('setUserInfo', {})
+      // 清除购物车信息 (跨模块调用mutation) cart/setCartList
+      context.commit('cart/setCartList', [], { root: true })
+    }
+  }
 
 }

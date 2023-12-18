@@ -95,7 +95,7 @@
     </div>
 
     <div class="logout-btn">
-      <button>退出登录</button>
+      <button @click="logout">退出登录</button>
     </div>
   </div>
 </template>
@@ -124,6 +124,16 @@ export default {
       const { data: { userInfo } } = await getUserInfoDetail()
       this.detail = userInfo
       console.log(this.detail)
+    },
+    logout () {
+      this.$dialog.confirm({
+        title: '温馨提示',
+        message: '你确定要退出登录吗?'
+      }).then(() => {
+        this.$store.dispatch('user/logout')
+      }).catch(() => {
+
+      })
     }
   }
 }
