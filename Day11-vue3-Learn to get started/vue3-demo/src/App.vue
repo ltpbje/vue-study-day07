@@ -8,13 +8,15 @@ const filterList= computed(()=>{
 const addFn=()=>{
   list.value.push(666)
 }
-// const val =ref(555)
-// const modifyList = computed({
-//   set:()=> list.value.filter(item => item > 2),
-//   get:(val.value) => {
-//     list.value.push(val.value) 
-//   }
-// })
+const count = computed({
+  get:()=> count,
+  set:(val) =>  { 
+    list.value.push(val)
+   }
+})
+const modifyListFn =()=>{
+  count.value = 555
+}
 </script>
 
 
@@ -23,7 +25,7 @@ const addFn=()=>{
     <div>原始的list {{ list }}</div>
     <div>计算属性过滤后的list {{ filterList }}</div>
     <button @click="addFn">按钮</button>
-    <button @click="addFn">按钮</button>
+    <button @click="modifyListFn">设置计算属性的值</button>
   </div>
 </template>
 
