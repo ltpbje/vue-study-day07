@@ -9,8 +9,11 @@ const addFn = () => {
     list.value.push(666)
 }
 const count = computed({
+    // 获取count的值
     get: () => count,
+    // 设置count的值
     set: (val) => {
+        // 将val的值添加到list中
         list.value.push(val)
     }
 })

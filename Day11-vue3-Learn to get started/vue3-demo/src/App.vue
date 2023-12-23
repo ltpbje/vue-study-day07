@@ -1,67 +1,29 @@
 <script setup>
-import { ref, watch } from 'vue'
-const count = ref(10)
-const name = ref('张三')
-const changeCount = ()=>{
-    count.value++
-}
-const changeName = ()=>{
-  name.value = '李四'
-}
-// 1.监听一个数据的变化 用ref对象
-// watch(ref对象，(newValue, oldValue) => {:: })
-// watch(count,(newCount,oldValue)=>{
-//   console.log(newCount,oldValue)
-// })
-// watch(name,(newName,oldName)=>{
-//   console.log(newName,oldName)
-// })
+import { onMounted } from 'vue'
 
-// 2.监视多个数据的变化 用arr数组
-watch([count,name],(newArr,oldArr)=>{
-  console.log(newArr,oldArr);
-})
+// 生命周期函数
+//beforeCreate和created的相关代码 
+//一律放在setup中执行
+  const getList =()=>{
+    //设置一个延迟1秒的定时器
+    setTimeout(()=>{
+        //打印出获取数据的信息
+        console.log('发送请求,获取了数据');
+    } ,1000)
+   }
+  //调用getList函数
+  // 一进入页面的请求
+  getList()
 
-// 3.immediate 立即执行
-// watch([count, name], (newArr, oldArr) => {
-//   console.log(newArr, oldArr);
-// },{
-//   immediate:true
-// })
+  // 如果有些代码需要在mounted生命周期中执行
+ onMounted(()=>{
+    console.log('mounted生命周期函数 逻辑一');
+ })
+ onMounted(()=>{
+    console.log('mounted生命周期函数 逻辑二');
+ })
+// 写成函数的调用方式，可以调用多次
 
-
-// 4.deep 深度监视 默认的watch是浅层监视
-// const ref1 = ref(简单类型)可以直接监视
-// const ref2 = ref(复杂类型)监视不到复杂类型内部数据的变化
-const userInfo  = ref({
-  name:'zs',
-  age:18
-})
-const changeUserInfo = ()=>{
-   userInfo.value.age ++ 
-}
-//  默认浅层监视
-//   修改了userInfo.value修改了对象的地址，才能监视到
-//   userInfo.value ={name:'ls',age:50}
-//  
-// watch(userInfo, (newObject, oldObject) => {
-//   console.log(newObject, oldObject);
-// },{
-//   deep:false
-// })
-
-// 深层监视
-// watch(userInfo, (newObject, oldObject) => {
-//   console.log(newObject, oldObject);
-// },{
-//   deep:true,
-//   immediate:true
-// })
-
-// 5.对于对象中的属性，进行监视 (不使用deep)
-watch(()=>userInfo.value.age , (newAge,oldAge)=>{
-    console.log(newAge, oldAge)
-})
 
 </script>
 

@@ -19,6 +19,7 @@ const changeName = () => {
 
 // 2.监视多个数据的变化 用arr数组
 watch([count, name], (newArr, oldArr) => {
+    // 当count和name发生变化时，执行回调函数
     console.log(newArr, oldArr);
 })
 
