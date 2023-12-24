@@ -1,37 +1,39 @@
 <script setup>
-// 父传子
-import { ref } from 'vue'
-import sonCom from '@/components/son-com.vue'
-const money= ref(1000)
-const getMoney=()=>{
-  money.value+=200
+import { onMounted, ref } from 'vue'
+import testCom from './components/test-com.vue';
+//模板引用（可以获取dom,也可以获取组件）
+// 获取dom
+const inpRef = ref(null)
+const inpForce=()=>{
+    //获取输入框的引用
+    inpRef.value.focus()
 }
-const changeMoney = (newMoney)=>{
-  money.value = newMoney
+onMounted(()=>{
+  // console.log(inpRef.value)
+
+})
+//获取组件
+const comRef = ref(null) 
+
+const getFn = ()=>{
+  // 调用testCom组件的count属性
+  console.log(comRef.value.count)
+ // 调用comRef的value属性，并调用sayHi方法
+  comRef.value.sayHi()
 }
 </script>
 
 
 <template>
   <div>
-    <div class="father">
-      父组件
-      <button @click="getMoney">挣钱</button>
-    </div>
-    <sonCom 
-    car="梅赛德斯奔驰" 
-    :money="money"
-    @changeMoney="changeMoney"
-    ></sonCom>
+    <input ref="inpRef"  type="text" name="" id="">
+    <button @click="inpForce">点击让输入框聚焦</button>
+    <testCom ref="comRef"></testCom>
+    <button @click="getFn">获取组件</button>
   </div>
 </template>
 
 
 <style>
-/* 为类名为father的元素添加一个正常大小的边框 */
-.father {
-  width: 100px;
-  height: 50px;
-  color: white;
-}
+
 </style>
